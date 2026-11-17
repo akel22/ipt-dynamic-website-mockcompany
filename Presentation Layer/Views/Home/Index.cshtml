@@ -1,11 +1,13 @@
-﻿@{
+﻿@model _241419_DynamicWebsite.Models.CompanyContent
+
+@{
     ViewData["Title"] = "Professional cleaning services";
 }
 
 <div class="landing-page">
-    <partial name="Sections/_Hero" />
-    <partial name="Sections/_About" />
-    <partial name="Sections/_Services" />
-    <partial name="Sections/_Contact" />
-    <partial name="Sections/_Ceo" />
+    <partial name="Sections/_Hero" model="Model" />
+    <partial name="Sections/_About" model="Model" />
+    <partial name="Sections/_Services" model="Model" />
+    <partial name="Sections/_Contact" model="Model" />
+    <partial name="Sections/_Ceo" model="Model" />
 </div>

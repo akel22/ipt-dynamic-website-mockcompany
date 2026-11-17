@@ -7,4 +7,12 @@ namespace _241419_DynamicWebsite.DataAccess;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser>(options)
 {
+    public DbSet<ContactRequest> ContactRequests => Set<ContactRequest>();
+
+    public DbSet<CompanyContent> CompanyContents => Set<CompanyContent>();
+
+    public DbSet<ServiceSummary> ServiceSummaries => Set<ServiceSummary>();
+
 }
+
+

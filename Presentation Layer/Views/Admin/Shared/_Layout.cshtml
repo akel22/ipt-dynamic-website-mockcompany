@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EZ Clean - Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/_241419_DynamicWebsite.styles.css" asp-append-version="true" />
+
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <div class="d-flex justify-content-center"> 
+                <a class="admin-brand mb-2" asp-controller="Home" asp-action="Index">EZ<span class=""> Clean.</span></a>
+            </div>
+            <nav class="admin-nav" aria-label="Admin navigation">
+                <a class="admin-nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Dashboard">
+                    <img class="admin-link-icon" src="~/assets/svg/dashboard.svg" alt="" aria-hidden="true" />
+                    Dashboard
+                </a>
+                <a class="admin-nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Users" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Users">
+                    <img class="admin-link-icon" src="~/assets/svg/accounts.svg" alt="" aria-hidden="true" />
+                    Users
+                </a>
+                <a class="admin-nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Content" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Content">
+                    <img class="admin-link-icon" src="~/assets/svg/website.svg" alt="" aria-hidden="true" />
+                    Website content
+                </a>
+            </nav>
+            <form asp-controller="Account" asp-action="Logout" method="post" class="mt-auto">
+                <button type="submit" class="admin-back-link admin-sidebar-logout">
+                    <img class="admin-link-icon" src="~/assets/svg/exit.svg" alt="" aria-hidden="true" />
+                    Log out
+                </button>
+            </form>
+        </aside>
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="user-greeting">hello, @User.Identity?.Name</span>
+                </div>
+            </header>
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,104 @@
+@model AdminUsersDto
+
+@{
+    ViewData["Title"] = "Users";
+    var startRecord = Model.TotalUsers == 0 ? 0 : ((Model.CurrentPage - 1) * Model.PageSize) + 1;
+    var endRecord = Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalUsers);
+
+    var windowSize = 5;
+    var startPage = Math.Max(1, Model.CurrentPage - (windowSize / 2));
+    var endPage = Math.Min(Model.TotalPages, startPage + windowSize - 1);
+
+    if (endPage - startPage + 1 < windowSize)
+    {
+        startPage = Math.Max(1, endPage - windowSize + 1);
+    }
+}
+
+<div class="admin-page-heading">
+    <div>
+        <h3 class="hidden">Manage user accounts</h3>
+    </div>
+</div>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<section class="admin-card">
+    <div class="admin-card-heading">
+        <div>
+            <h2>All accounts</h2>
+            <p>@Model.TotalUsers account(s) registered.</p>
+            <p class="mb-0 text-muted small">Showing @startRecord-@endRecord of @Model.TotalUsers</p>
+        </div>
+    </div>
+
+    @if (Model.Users.Count == 0)
+    {
+        <div class="admin-empty-state">
+            <h3>No accounts yet</h3>
+            <p>Registered accounts will appear here.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table admin-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Occupation</th>
+                        <th scope="col">Date of birth</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td data-label="Email">@user.Email</td>
+                            <td data-label="Occupation">@user.OccupationStatus</td>
+                            <td data-label="Date of birth">@user.DateOfBirth.ToString("MMM d, yyyy")</td>
+                            <td data-label="Status">
+                                <span class="text-@(user.IsActive ? "success" : "danger")">
+                                    @(user.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td data-label="Action" class="text-end">
+                                <form asp-action="ToggleStatus" method="post">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <input type="hidden" name="page" value="@Model.CurrentPage" />
+                                    <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-outline-secondary" : "btn-primary")">
+                                        @(user.IsActive ? "Deactivate" : "Activate")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Users pagination" class="mt-4">
+            <ul class="pagination">
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                    <a class="page-link" asp-action="Users" asp-route-page="@(Model.CurrentPage - 1)">Previous</a>
+                </li>
+
+                @for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                {
+                    <li class="page-item @(pageNumber == Model.CurrentPage ? "active" : string.Empty)">
+                        <a class="page-link" asp-action="Users" asp-route-page="@pageNumber" aria-current="@(pageNumber == Model.CurrentPage ? "page" : null)">@pageNumber</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                    <a class="page-link" asp-action="Users" asp-route-page="@(Model.CurrentPage + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</section>

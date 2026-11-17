@@ -1,29 +1,19 @@
+@model _241419_DynamicWebsite.Models.CompanyContent
+
 <section id="services" class="section-shell section-muted" aria-labelledby="services-title">
     <div class="text-center section-heading">
-        <p class="eyebrow">What we do</p>
-        <h2 id="services-title">Services for every kind of space.</h2>
+        <p class="eyebrow text-muted">@Model.ServicesEyebrow</p>
+        <h2 id="services-title">@Model.ServicesTitle</h2>
     </div>
     <div class="row g-4">
-        <div class="col-md-4">
-            <article class="service-card h-100">
-                <span class="service-number">01</span>
-                <h3>Residential cleaning</h3>
-                <p>Thoughtful recurring or one-time cleaning that makes your home feel ready for what comes next.</p>
-            </article>
-        </div>
-        <div class="col-md-4">
-            <article class="service-card h-100">
-                <span class="service-number">02</span>
-                <h3>Commercial cleaning</h3>
-                <p>Professional care for offices and business spaces so your team and guests can focus on the work.</p>
-            </article>
-        </div>
-        <div class="col-md-4">
-            <article class="service-card h-100">
-                <span class="service-number">03</span>
-                <h3>Deep cleaning</h3>
-                <p>A detailed reset for the areas that need extra attention, from top to bottom and room to room.</p>
-            </article>
-        </div>
+        @foreach (var service in Model.Services.OrderBy(item => item.Id))
+        {
+            <div class="col-md-4">
+                <article class="service-card h-100">
+                    <h3 class="mt-2">@service.Name</h3>
+                    <p>@service.Description</p>
+                </article>
+            </div>
+        }
     </div>
 </section>

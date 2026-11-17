@@ -11,9 +11,17 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container">
-                <a class="navbar-brand">BrightNest<span>.</span></a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">EZ<span> Clean.</span></a>
+                }
+                else
+                {
+                    <a class="navbar-brand">EZ<span> Clean.</span></a>
+                }
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,10 +39,10 @@
                     <div class="d-flex align-items-center gap-2">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <span class="user-greeting d-none d-md-inline">Hello, @User.Identity.Name</span>
-                            <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" class="btn btn-outline-primary btn-sm">Log out</button>
-                            </form>
+                            <span class="user-greeting d-none d-md-inline">Hello, @(User.Identity.Name ?? "there")</span>
+                            <a class="profile-link" asp-controller="Account" asp-action="Profile">
+                               <img class="profile-link-icon" src="~/assets/svg/profile.svg" alt="" aria-hidden="true" />
+                            </a>
                         }
                        
                     </div>
@@ -51,8 +59,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <span>&copy; @DateTime.Now.Year BrightNest Cleaning</span>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <span>&copy; @DateTime.Now.Year EZ Clean by Ezekiel</span>
             </div>
         </div>
     </footer>

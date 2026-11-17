@@ -1,3 +1,4 @@
+using _241419_DynamicWebsite.Application.Services;
 using _241419_DynamicWebsite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -5,12 +6,13 @@ using System.Diagnostics;
 
 namespace _241419_DynamicWebsite.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IWebsiteContentService websiteContentService) : Controller
     {
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var content = await websiteContentService.GetPublicContentAsync();
+            return View(content);
         }
 
         public IActionResult Privacy()

@@ -1,12 +1,14 @@
+@model _241419_DynamicWebsite.Models.CompanyContent
+
 <section id="about" class="section-shell" aria-labelledby="about-title">
     <div class="row g-5 align-items-center">
         <div class="col-md-5">
-            <p class="eyebrow">About the company</p>
-            <h2 id="about-title">Cleaning built around your routine.</h2>
+            <p class="eyebrow">@Model.AboutEyebrow</p>
+            <h2 id="about-title">@Model.AboutTitle</h2>
         </div>
         <div class="col-md-7">
-            <p class="section-copy">We help families and businesses enjoy well-kept spaces without adding another task to their day. Our team brings dependable processes, thoughtful products, and a commitment to doing the job right.</p>
-            <p class="section-copy mb-0">From a regular home refresh to a detailed commercial clean, we tailor every visit to the people and spaces we serve.</p>
+            <p class="section-copy">@Model.AboutDescription</p>
+            <p class="section-copy mb-0">@Model.AboutSecondaryDescription</p>
         </div>
     </div>
 </section>

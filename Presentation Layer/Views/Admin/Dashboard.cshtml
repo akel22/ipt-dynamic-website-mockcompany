@@ -1,0 +1,117 @@
+@model AdminDashboardDto
+@using System.Text.Json
+@using _241419_DynamicWebsite.DTOs
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var occupationLabels = new[] { "Student", "Employed", "Unemployed", "Others" };
+    var occupationValues = new[] { Model.StudentCount, Model.EmployedCount, Model.UnemployedCount, Model.OthersCount };
+    var accountValues = new[] { Model.ActiveAccountCount, Model.InactiveAccountCount };
+}
+
+<h3 class="mb-4">Overview</h3>
+<div class="admin-stat-grid">
+    <div class="admin-stat-card">
+        <span class="admin-stat-label">Total accounts</span>
+        <strong>@Model.TotalAccountCount</strong>
+    </div>
+    <div class="admin-stat-card">
+        <span class="admin-stat-label">Active accounts</span>
+        <strong class="text-success">@Model.ActiveAccountCount</strong>
+    </div>
+    <div class="admin-stat-card">
+        <span class="admin-stat-label">Inactive accounts</span>
+        <strong class="text-danger">@Model.InactiveAccountCount</strong>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-7">
+        <section class="admin-card h-100" aria-labelledby="occupation-chart-title">
+            <div class="admin-card-heading">
+                <div>
+                    <h2 id="occupation-chart-title">Occupational status</h2>
+                    <p>Account distribution by occupation.</p>
+                </div>
+            </div>
+            <div class="admin-chart-container admin-chart-bar">
+                <canvas id="occupationChart" aria-label="Horizontal bar chart comparing occupational status"></canvas>
+            </div>
+            <ul class="visually-hidden">
+                @for (var index = 0; index < occupationLabels.Length; index++)
+                {
+                    <li>@occupationLabels[index]: @occupationValues[index]</li>
+                }
+            </ul>
+        </section>
+    </div>
+    <div class="col-12 col-xl-5">
+        <section class="admin-card h-100" aria-labelledby="account-chart-title">
+            <div class="admin-card-heading">
+                <div>
+                    <h2 id="account-chart-title">Account activity</h2>
+                    <p>Active versus inactive accounts.</p>
+                </div>
+            </div>
+            <div class="admin-chart-container admin-chart-pie">
+                <canvas id="accountChart" aria-label="Pie chart comparing active and inactive accounts"></canvas>
+            </div>
+            <ul class="visually-hidden">
+                <li>Active: @Model.ActiveAccountCount</li>
+                <li>Inactive: @Model.InactiveAccountCount</li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+        const occupationLabels = @Html.Raw(JsonSerializer.Serialize(occupationLabels));
+        const occupationValues = @Html.Raw(JsonSerializer.Serialize(occupationValues));
+        const accountValues = @Html.Raw(JsonSerializer.Serialize(accountValues));
+
+        new Chart(document.getElementById('occupationChart'), {
+            type: 'bar',
+            data: {
+                labels: occupationLabels,
+                datasets: [{
+                    label: 'Accounts',
+                    data: occupationValues,
+                    backgroundColor: ['#2373F4', '#15469d', '#F2F7A0', '#BFC6C4'],
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, ticks: { precision: 0 } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('accountChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Inactive'],
+                datasets: [{
+                    data: accountValues,
+                    backgroundColor: ['Green', 'Red'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                cutout: '62%',
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    </script>
+}

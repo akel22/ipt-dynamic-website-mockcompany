@@ -1,13 +1,64 @@
+@model _241419_DynamicWebsite.Models.CompanyContent
+
 <section id="contact" class="section-shell contact-section" aria-labelledby="contact-title">
-    <div class="row align-items-center g-4">
-        <div class="col-lg-8">
-            <p class="eyebrow">Getting in touch</p>
-            <h2 id="contact-title">Let’s make your space shine.</h2>
-            <p class="section-copy mb-0">Tell us a little about your space and what you need. We’ll help you find the right cleaning plan.</p>
-        </div>
-        <div class="col-lg-4 text-lg-end">
-            <a class="btn btn-light btn-lg" href="mailto:hello@cleanspaces.example">hello@cleanspaces.example</a>
-            <a class="contact-phone" href="tel:+15550101000">(555) 010-1000</a>
+    <div class="contact-card">
+        <div class="row g-4 g-lg-5 align-items-start">
+            <div class="col-lg-6">
+                <p class="eyebrow">@Model.ContactEyebrow</p>
+                <h2 id="contact-title">@Model.ContactTitle</h2>
+                <p class="section-copy">@Model.ContactDescription</p>
+
+                <ul class="contact-info-list" aria-label="Contact details">
+                    <li>
+                        <img class="contact-info-icon" src="/assets/svg/email.svg" alt="" aria-hidden="true" />
+                        <span class="contact-info-item-text">@Model.ContactEmail</span>
+                    </li>
+                    <li>
+                        <img class="contact-info-icon" src="/assets/svg/address.svg" alt="" aria-hidden="true" />
+                        <span class="contact-info-item-text">@Model.HomeAddress</span>
+                    </li>
+                    <li>
+                        <img class="contact-info-icon" src="/assets/svg/telephone.svg" alt="" aria-hidden="true" />
+                        <span class="contact-info-item-text">@Model.ContactPhone</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-6">
+                <form id="contact-form" class="contact-form" aria-label="Get in touch form" data-contact-email="@Model.ContactEmail">
+                    <input type="text" class="form-control" name="name" placeholder="Name*" aria-label="Name" required />
+                    <input type="email" class="form-control" name="email" placeholder="Email*" aria-label="Email" required />
+                    <textarea class="form-control" name="message" rows="4" placeholder="Message" aria-label="Message" required></textarea>
+                    <button type="submit" class="btn btn-primary contact-submit">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>
+
+<script>
+    (() => {
+        const form = document.getElementById('contact-form');
+
+        if (!form) {
+            return;
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const name = (formData.get('name') || '').toString().trim();
+            const email = (formData.get('email') || '').toString().trim();
+            const website = (formData.get('website') || '').toString().trim();
+            const message = (formData.get('message') || '').toString().trim();
+            const to = (form.dataset.contactEmail || '').trim();
+
+            const subject = `Contact Form Message from ${name}`;
+            const body = `Name: ${name}\nEmail: ${email}\nWebsite: ${website || 'N/A'}\n\nMessage:\n${message}`;
+            const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            window.open(gmailComposeUrl, '_blank', 'noopener');
+        });
+    })();
+</script>

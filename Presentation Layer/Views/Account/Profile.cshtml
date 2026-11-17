@@ -1,0 +1,82 @@
+@model _241419_DynamicWebsite.DTOs.ProfileDto
+@using _241419_DynamicWebsite.Enums
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="auth-card profile-card mx-auto">
+    <div class="profile-heading text-center">
+        <div class="profile-avatar" aria-hidden="true">@(Model.UserName.FirstOrDefault().ToString().ToUpperInvariant())</div>
+        <h1 class="h3 mb-1">Your profile</h1>
+        <p class="text-muted mb-0">Keep your account information up to date.</p>
+    </div>
+
+    @if (TempData["ProfileMessage"] is string message)
+    {
+        <div class="alert alert-success" role="status">@message</div>
+    }
+
+    <form asp-action="Profile" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <section>
+            <h2 class="profile-section-title">Account details</h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label asp-for="UserName" class="form-label"></label>
+                    <input asp-for="UserName" class="form-control" autocomplete="username" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="DateOfBirth" class="form-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="OccupationStatus" class="form-label"></label>
+                    <select asp-for="OccupationStatus" asp-items="Html.GetEnumSelectList<OccupationStatus>()" class="form-select">
+                        <option value="">Select occupation status</option>
+                    </select>
+                    <span asp-validation-for="OccupationStatus" class="text-danger"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-password-section">
+            <h2 class="profile-section-title">Change password</h2>
+            <p class="text-muted small">Leave these fields blank if you do not want to change your password.</p>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="CurrentPassword" class="form-label"></label>
+                    <input asp-for="CurrentPassword" class="form-control" autocomplete="current-password" />
+                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="NewPassword" class="form-label"></label>
+                    <input asp-for="NewPassword" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="ConfirmNewPassword" class="form-label"></label>
+                    <input asp-for="ConfirmNewPassword" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                </div>
+            </div>
+        </section>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mt-4">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-link text-danger profile-logout-button" form="logout-form">Log out</button>
+        </div>
+    </form>
+
+    <form id="logout-form" asp-controller="Account" asp-action="Logout" method="post"></form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

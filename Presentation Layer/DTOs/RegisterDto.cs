@@ -5,6 +5,10 @@ namespace _241419_DynamicWebsite.DTOs;
 
 public class RegisterDto
 {
+    [Required, StringLength(50, MinimumLength = 3)]
+    [Display(Name = "Username")]
+    public string UserName { get; set; } = string.Empty;
+
     [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
 

@@ -1,0 +1,85 @@
+@model AdminContentDto
+@{
+    ViewData["Title"] = "Website content";
+}
+
+<div class="admin-page-heading">
+    <div>
+        <h3 class="mb-4">Website content</h3>
+        <p class="admin-page-copy">Edit the info visitors see on the public website.</p>
+    </div>
+</div>
+
+@if (TempData["ContentMessage"] is string message)
+{
+    <div class="alert alert-success" role="status">@message</div>
+}
+
+<form asp-action="Content" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <section class="admin-card mb-4">
+        <div class="admin-card-heading"><div><h2>Hero section</h2><p>The first message visitors see.</p></div></div>
+        <div class="row g-3">
+            <div class="col-12"><label asp-for="HeroTitle" class="form-label"></label><input asp-for="HeroTitle" class="form-control" /><span asp-validation-for="HeroTitle" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="HeroDescription" class="form-label"></label><textarea asp-for="HeroDescription" class="form-control" rows="3"></textarea><span asp-validation-for="HeroDescription" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="HeroCtaText" class="form-label"></label><input asp-for="HeroCtaText" class="form-control" /><span asp-validation-for="HeroCtaText" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="HeroCtaTarget" class="form-label"></label><input asp-for="HeroCtaTarget" class="form-control" /><span asp-validation-for="HeroCtaTarget" class="text-danger"></span></div>
+        </div>
+    </section>
+
+    <section class="admin-card mb-4">
+        <div class="admin-card-heading"><div><h2>About section</h2><p>Tell visitors about the company.</p></div></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="AboutEyebrow" class="form-label"></label><input asp-for="AboutEyebrow" class="form-control" /><span asp-validation-for="AboutEyebrow" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="AboutTitle" class="form-label"></label><input asp-for="AboutTitle" class="form-control" /><span asp-validation-for="AboutTitle" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="AboutDescription" class="form-label"></label><textarea asp-for="AboutDescription" class="form-control" rows="3"></textarea><span asp-validation-for="AboutDescription" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="AboutSecondaryDescription" class="form-label"></label><textarea asp-for="AboutSecondaryDescription" class="form-control" rows="3"></textarea><span asp-validation-for="AboutSecondaryDescription" class="text-danger"></span></div>
+        </div>
+    </section>
+
+    <section class="admin-card mb-4">
+        <div class="admin-card-heading"><div><h2>Services</h2><p>Update the service cards displayed on the homepage.</p></div></div>
+        @for (var index = 0; index < Model.Services.Count; index++)
+        {
+            <div class="admin-content-service @(index > 0 ? "mt-4 pt-4 border-top" : string.Empty)">
+                <input asp-for="Services[index].Id" type="hidden" />
+                <div class="row g-3">
+                    <div class="col-12"><label asp-for="Services[index].Name" class="form-label"></label><input asp-for="Services[index].Name" class="form-control" /><span asp-validation-for="Services[index].Name" class="text-danger"></span></div>
+                    <div class="col-12"><label asp-for="Services[index].Description" class="form-label"></label><textarea asp-for="Services[index].Description" class="form-control" rows="2"></textarea><span asp-validation-for="Services[index].Description" class="text-danger"></span></div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <section class="admin-card mb-4">
+        <div class="admin-card-heading"><div><h2>Contact section</h2><p>Keep your contact details current.</p></div></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="ContactEyebrow" class="form-label"></label><input asp-for="ContactEyebrow" class="form-control" /><span asp-validation-for="ContactEyebrow" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ContactTitle" class="form-label"></label><input asp-for="ContactTitle" class="form-control" /><span asp-validation-for="ContactTitle" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="ContactDescription" class="form-label"></label><textarea asp-for="ContactDescription" class="form-control" rows="3"></textarea><span asp-validation-for="ContactDescription" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ContactEmail" class="form-label"></label><input asp-for="ContactEmail" class="form-control" /><span asp-validation-for="ContactEmail" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ContactPhone" class="form-label"></label><input asp-for="ContactPhone" class="form-control" /><span asp-validation-for="ContactPhone" class="text-danger"></span></div>
+        </div>
+    </section>
+
+    <section class="admin-card mb-4">
+        <div class="admin-card-heading"><div><h2>CEO section</h2><p>Update the leadership message.</p></div></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="CeoEyebrow" class="form-label"></label><input asp-for="CeoEyebrow" class="form-control" /><span asp-validation-for="CeoEyebrow" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ChiefExecutiveName" class="form-label"></label><input asp-for="ChiefExecutiveName" class="form-control" /><span asp-validation-for="ChiefExecutiveName" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="CeoTitle" class="form-label"> </label><input asp-for="CeoTitle" class="form-control" /><span asp-validation-for="CeoTitle" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ChiefExecutiveTitle" class="form-label">Chief Executive Title</label><input asp-for="ChiefExecutiveTitle" class="form-control" /><span asp-validation-for="ChiefExecutiveTitle" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="ChiefExecutiveDescription" class="form-label">Chief Executive Description</label><textarea asp-for="ChiefExecutiveDescription" class="form-control" rows="3"></textarea><span asp-validation-for="ChiefExecutiveDescription" class="text-danger"></span></div>
+        </div>
+    </section>
+
+    <button type="submit" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2">
+        <img class="admin-link-icon" src="~/assets/svg/check.svg" alt="" aria-hidden="true" />
+        <span>Save changes</span>
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
