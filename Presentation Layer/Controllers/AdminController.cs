@@ -24,6 +24,17 @@ public class AdminController(
         return View(users);
     }
 
+    public async Task<IActionResult> UserDetails(string id)
+    {
+        var user = await userAccountsService.GetUserDetailsAsync(id);
+        if (user is null)
+        {
+            return NotFound();
+        }
+
+        return View(user);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Content()
     {
@@ -50,6 +61,29 @@ public class AdminController(
     public async Task<IActionResult> ToggleStatus(string id, int page = 1)
     {
         var result = await userAccountsService.ToggleStatusAsync(id);
+        if (result.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error);
+            }
+
+            return View("Users", await userAccountsService.GetUsersAsync(page));
+        }
+
+        return RedirectToAction(nameof(Users), new { page });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteUser(string id, int page = 1)
+    {
+        var result = await userAccountsService.DeleteAsync(id);
         if (result.NotFound)
         {
             return NotFound();

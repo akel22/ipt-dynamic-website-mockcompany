@@ -46,6 +46,7 @@ public sealed class WebsiteContentService(ApplicationDbContext dbContext) : IWeb
         }
 
         CopyContent(model, content);
+
         dbContext.ServiceSummaries.RemoveRange(content.Services);
         content.Services = model.Services.Select(service => new ServiceSummary
         {
@@ -111,6 +112,7 @@ public sealed class WebsiteContentService(ApplicationDbContext dbContext) : IWeb
         content.HeroDescription = model.HeroDescription;
         content.HeroCtaText = model.HeroCtaText;
         content.HeroCtaTarget = model.HeroCtaTarget;
+        content.AboutEyebrow = model.AboutEyebrow;
         content.AboutTitle = model.AboutTitle;
         content.AboutDescription = model.AboutDescription;
         content.AboutSecondaryDescription = model.AboutSecondaryDescription;

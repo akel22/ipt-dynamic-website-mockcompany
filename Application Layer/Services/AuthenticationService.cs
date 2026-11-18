@@ -46,6 +46,15 @@ public sealed class AuthenticationService(
     public async Task<AuthenticationResult> LoginAsync(LoginDto model, CancellationToken cancellationToken = default)
     {
         var user = await userManager.FindByEmailAsync(model.Email);
+        if (user is not null && !user.IsActive)
+        {
+            return new AuthenticationResult
+            {
+                Succeeded = false,
+                Errors = ["Your account is inactive. Please contact an administrator."]
+            };
+        }
+
         var result = user is null
             ? SignInResult.Failed
             : await signInManager.PasswordSignInAsync(

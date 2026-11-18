@@ -49,7 +49,23 @@ public class AccountController(
     [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Dashboard", "Admin");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
         ViewData["ReturnUrl"] = returnUrl;
+        return View();
+    }
+
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
         return View();
     }
 

@@ -65,13 +65,32 @@
                                 </span>
                             </td>
                             <td data-label="Action" class="text-end">
-                                <form asp-action="ToggleStatus" method="post">
-                                    <input type="hidden" name="id" value="@user.Id" />
-                                    <input type="hidden" name="page" value="@Model.CurrentPage" />
-                                    <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-outline-secondary" : "btn-primary")">
-                                        @(user.IsActive ? "Deactivate" : "Activate")
+                                <div class="d-inline-flex align-items-center gap-2">
+                                    <a asp-route="admin-user-details"
+                                       asp-route-id="@user.Id"
+                                       class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center justify-content-center p-1"
+                                       style="width: 2rem; height: 2rem;"
+                                       aria-label="View user details">
+                                        <img src="~/assets/svg/view.svg" alt="" aria-hidden="true" style="width: 1.1rem; height: 1.1rem;" />
+                                    </a>
+                                    <form asp-action="ToggleStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <input type="hidden" name="page" value="@Model.CurrentPage" />
+                                        <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-outline-secondary" : "btn-primary")">
+                                            @(user.IsActive ? "Deactivate" : "Activate")
+                                        </button>
+                                    </form>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger d-inline-flex align-items-center justify-content-center p-1"
+                                            style="width: 2rem; height: 2rem;"
+                                            aria-label="Delete user"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteUserModal"
+                                            data-user-id="@user.Id"
+                                            data-user-email="@user.Email">
+                                        <img src="~/assets/svg/delete.svg" alt="" aria-hidden="true" style="width: 1.3rem; height: 1.3rem;" />
                                     </button>
-                                </form>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -102,3 +121,54 @@
         </nav>
     }
 </section>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to permanently delete <strong id="deleteUserEmail"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-action="DeleteUser" method="post" class="d-inline">
+                    <input type="hidden" id="deleteUserId" name="id" value="" />
+                    <input type="hidden" name="page" value="@Model.CurrentPage" />
+                    <button type="submit" class="btn btn-danger">Delete user</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteUserModal = document.getElementById('deleteUserModal');
+
+        if (deleteUserModal) {
+            deleteUserModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                if (!button) {
+                    return;
+                }
+
+                const userId = button.getAttribute('data-user-id') || '';
+                const userEmail = button.getAttribute('data-user-email') || 'this user';
+
+                const idInput = deleteUserModal.querySelector('#deleteUserId');
+                const emailText = deleteUserModal.querySelector('#deleteUserEmail');
+
+                if (idInput) {
+                    idInput.value = userId;
+                }
+
+                if (emailText) {
+                    emailText.textContent = userEmail;
+                }
+            });
+        }
+    </script>
+}

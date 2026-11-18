@@ -40,6 +40,10 @@
 
     <section class="admin-card mb-4">
         <div class="admin-card-heading"><div><h2>Services</h2><p>Update the service cards displayed on the homepage.</p></div></div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6"><label asp-for="ServicesEyebrow" class="form-label"></label><input asp-for="ServicesEyebrow" class="form-control" /><span asp-validation-for="ServicesEyebrow" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="ServicesTitle" class="form-label"></label><input asp-for="ServicesTitle" class="form-control" /><span asp-validation-for="ServicesTitle" class="text-danger"></span></div>
+        </div>
         @for (var index = 0; index < Model.Services.Count; index++)
         {
             <div class="admin-content-service @(index > 0 ? "mt-4 pt-4 border-top" : string.Empty)">

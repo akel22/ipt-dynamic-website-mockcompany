@@ -9,5 +9,9 @@ public interface IUserAccountsService
 
     Task<AdminUsersDto> GetUsersAsync(int page, CancellationToken cancellationToken = default);
 
+    Task<AdminUserDetailsDto?> GetUserDetailsAsync(string id, CancellationToken cancellationToken = default);
+
     Task<UserAccountStatusResult> ToggleStatusAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<UserAccountStatusResult> DeleteAsync(string id, CancellationToken cancellationToken = default);
 }
